@@ -19,7 +19,7 @@ const navigateTo = url => {
     router();
 };
 
-const router = async () => {
+const router = async() => {
     const routes = [
         { path: "/dashboard", view: Dashboard },
         { path: "/orders", view: Orders },
