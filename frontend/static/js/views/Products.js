@@ -9,9 +9,42 @@ export default class extends AbstractView {
 
     async getHtml() {
 
+
+
         fetch(`http://127.0.0.1:8000/products/`)
             .then(res => res.json())
             .then(result => {
+                const myForm = document.querySelector('#myForm');
+
+                myForm.addEventListener('submit', (element) => {
+
+                    element.preventDefault();
+                    console.log(element)
+
+                    const code = document.getElementById('code');
+                    const title = document.getElementById('title');
+                    const description = document.getElementById('description');
+                    const price = document.getElementById('price');
+                    const category = document.getElementById('category');
+                    console.log(title)
+
+                    fetch(`http://127.0.0.1:8000/products/`, {
+                        method: 'post',
+                        body: JSON.stringify({
+                            code: code,
+                            title: title,
+                            description: description,
+                            price: price,
+                            category: category
+                        }),
+                    }).then(response => response.json())
+                        .then(res => {
+                            console.log(res)
+                        })
+                })
+
+
+
                 result.forEach(data => {
                     let div = document.querySelector('#t-body');
                     div.innerHTML +=
@@ -25,7 +58,7 @@ export default class extends AbstractView {
                         <td>${data.user_creator}</td>
                         <td><a href="/details/${data.id}" data-link>Ver</a></td>
                         </tr>
-                        `
+                        `;
                 })
             })
 
@@ -53,39 +86,38 @@ export default class extends AbstractView {
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                                 </div>
-                                <div class="modal-body">
-                                    <form>
+                                <form id="myForm" method="post" enctype="multipart/form-data">
+                                    <div class="modal-body"> 
                                         <div class="col-lg">
                                             <label for="recipient-name" class="col-form-label">Code:</label>
-                                            <input type="text" class="form-control" id="recipient-name">
+                                            <input type="text" class="form-control" id="code">
                                         </div>
                                         <div class="col-lg">
                                             <label for="recipient-name" class="col-form-label">Title</label>
-                                            <input type="text" class="form-control" id="recipient-name">
+                                            <input type="text" class="form-control" id="title">
                                         </div>
                                         <div class="col-lg">
                                             <label for="recipient-name" class="col-form-label">Description</label>
-                                            <textarea class="form-control" id="message-text"></textarea>
+                                            <textarea class="form-control" id="description"></textarea>
                                         </div>
                                         <div class="col-md-4">
                                             <label for="recipient-name" class="col-form-label">Price</label>
-                                            <input type="number" class="form-control" id=""></input>
+                                            <input type="number" class="form-control" id="price"></input>
                                         </div>
                                         <div class="col-lg">
                                             <label for="message-text" class="col-form-label">Category</label>
-                                            <select id="" name="">
-                                                <option value="volvo">Test</option>
-                                                <option value="volvo">Test</option>
-                                                <option value="volvo">Test</option>
+                                            <select class="form-control id="" name="category">
+                                                <option value="">Test</option>
+                                                <option value="">Test</option>
+                                                <option value="">Test</option>
                                             </select>
                                         </div>
-
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Send message</button>
-                                </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Create</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
