@@ -21,21 +21,20 @@ export default class extends AbstractView {
                     element.preventDefault();
                     console.log(element)
 
-                    const code = document.getElementById('code');
-                    const title = document.getElementById('title');
-                    const description = document.getElementById('description');
-                    const price = document.getElementById('price');
-                    const category = document.getElementById('category');
-                    console.log(title)
+                    const code = document.getElementById('code').value;
+                    const title = document.getElementById('title').value;
+                    const description = document.getElementById('description').value;
+                    const price = document.getElementById('price').value;
+                    //const category = document.getElementById('category');
 
                     fetch(`http://127.0.0.1:8000/products/`, {
                         method: 'post',
                         body: JSON.stringify({
-                            code: code,
+                            item_code: code,
                             title: title,
                             description: description,
                             price: price,
-                            category: category
+                            //category: category
                         }),
                     }).then(response => response.json())
                         .then(res => {
@@ -90,24 +89,24 @@ export default class extends AbstractView {
                                     <div class="modal-body"> 
                                         <div class="col-lg">
                                             <label for="recipient-name" class="col-form-label">Code:</label>
-                                            <input type="text" class="form-control" id="code">
+                                            <input type="text" class="form-control" id="code" value="">
                                         </div>
                                         <div class="col-lg">
                                             <label for="recipient-name" class="col-form-label">Title</label>
-                                            <input type="text" class="form-control" id="title">
+                                            <input type="text" class="form-control" id="title" value="">
                                         </div>
                                         <div class="col-lg">
                                             <label for="recipient-name" class="col-form-label">Description</label>
-                                            <textarea class="form-control" id="description"></textarea>
+                                            <textarea class="form-control" id="description" value=""></textarea>
                                         </div>
                                         <div class="col-md-4">
                                             <label for="recipient-name" class="col-form-label">Price</label>
-                                            <input type="number" class="form-control" id="price"></input>
+                                            <input type="number" class="form-control" id="price" value=""></input>
                                         </div>
                                         <div class="col-lg">
                                             <label for="message-text" class="col-form-label">Category</label>
-                                            <select class="form-control id="" name="category">
-                                                <option value="">Test</option>
+                                            <select class="form-control id="category" value="">
+                                                <option value="Spray">Spray</option>
                                                 <option value="">Test</option>
                                                 <option value="">Test</option>
                                             </select>
