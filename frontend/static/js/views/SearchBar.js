@@ -16,17 +16,28 @@ fetch(`http://127.0.0.1:8000/products/`)
         
         for( let i=0; i < result.length; i++) {
             DropDown.innerHTML += `
-            <a id="get-${result[i].id}" href="">${result[i].title}</a>`
+            <a href="/details/${result[i].id}" data-link>${result[i].title} - <small>${result[i].item_code}</small></a>`
         }
 
-        Search.addEventListener('keyup', () => {
-            DropDown.classList.toggle("show");
-            var filter = Search.value.toUpperCase();
-            Searching(filter)
-        })
+        document.addEventListener('click', (e) => {
+
+            DropDown.style.display = 'none';
+            
+            if (e.target !== Search) {
+                DropDown.style.display = 'none';
+            } else if (e.target == Search) {
+                DropDown.style.display = ''
+                Search.addEventListener('keyup', () => {
+                    DropDown.classList.toggle("show");
+                    var filter = Search.value.toUpperCase();
+                    Searching(filter)
+                    })
+                }
+            })
+        
 
         function Searching(e) {
-            
+
             var a, i, txtValue;
             
             a = DropData.getElementsByTagName("a");
