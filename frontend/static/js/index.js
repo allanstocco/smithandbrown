@@ -2,6 +2,7 @@ import Dashboard from "./views/Dashboard.js";
 import Orders from "./views/Orders.js";
 import Products from "./views/Products.js";
 import Details from "./views/Details.js";
+import SearchBar from "./views/SearchBar.js";
 
 const pathToRegex = path => new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
 
@@ -21,13 +22,13 @@ const navigateTo = url => {
 
 const router = async() => {
     const routes = [
+        { path: "", view: SearchBar},
         { path: "/dashboard", view: Dashboard },
         { path: "/orders", view: Orders },
         { path: "/products", view: Products },
         { path: "/details/:id", view: Details }
     ];
 
-    // Test each route for potential match
     const potentialMatches = routes.map(route => {
         return {
             route: route,
@@ -43,6 +44,7 @@ const router = async() => {
             result: [location.pathname]
         };
     }
+
 
     const view = new match.route.view(getParams(match));
 

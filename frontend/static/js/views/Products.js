@@ -9,8 +9,6 @@ export default class extends AbstractView {
 
     async getHtml() {
 
-
-
         fetch(`http://127.0.0.1:8000/products/`)
             .then(res => res.json())
             .then(result => {
@@ -19,7 +17,6 @@ export default class extends AbstractView {
                 myForm.addEventListener('submit', (element) => {
 
                     element.preventDefault();
-                    console.log(element)
 
                     const code = document.getElementById('code').value;
                     const title = document.getElementById('title').value;
@@ -38,11 +35,9 @@ export default class extends AbstractView {
                         }),
                     }).then(response => response.json())
                         .then(res => {
-                            console.log(res)
+                            window.location.reload()
                         })
                 })
-
-
 
                 result.forEach(data => {
                     let div = document.querySelector('#t-body');
@@ -55,7 +50,7 @@ export default class extends AbstractView {
                         <td>${data.price}</td>
                         <td>${data.category}</td>
                         <td>${data.user_creator}</td>
-                        <td><a href="/details/${data.id}" data-link>Ver</a></td>
+                        <td><a class="button" href="/details/${data.id}" data-link>Details</a></td>
                         </tr>
                         `;
                 })
@@ -77,7 +72,7 @@ export default class extends AbstractView {
                         </form>
                     </div>
                     <!-- Init Modal -->
-                    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="" aria-hidden="true">
+                    <div class="modal custom fade" id="modal" tabindex="-1" aria-labelledby="" aria-hidden="true">
                         <div class="modal-dialog modal-sm">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -113,7 +108,6 @@ export default class extends AbstractView {
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                         <button type="submit" class="btn btn-primary">Create</button>
                                     </div>
                                 </form>
@@ -125,7 +119,7 @@ export default class extends AbstractView {
                 <!-- Items Content -->
                 <h2>Products / Items</h2>
                 <div class="table-responsive">
-                    <table class="table table-striped table-sm">
+                    <table class="table table table-sm">
                         <thead>
                             <tr>
                                 <th scope="col">Code</th>
@@ -133,7 +127,7 @@ export default class extends AbstractView {
                                 <th scope="col">Description</th>
                                 <th scope="col">Price</th>
                                 <th scope="col">Category</th>
-                                <th scope="col">Registered By</th>
+                                <th scope="col">Registered</th>
                             </tr>
                         </thead>
                         <tbody id="t-body"></tbody>
