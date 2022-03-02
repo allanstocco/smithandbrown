@@ -7,12 +7,17 @@ import SearchBar from "./views/SearchBar.js";
 const pathToRegex = path => new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
 
 const getParams = match => {
-    const values = match.result.slice(1);
-    const keys = Array.from(match.route.path.matchAll(/:(\w+)/g)).map(result => result[1]);
+    try {
+        const values = match.result.slice(1);
+        const keys = Array.from(match.route.path.matchAll(/:(\w+)/g)).map(result => result[1]);
 
-    return Object.fromEntries(keys.map((key, i) => {
-        return [key, values[i]];
-    }));
+        return Object.fromEntries(keys.map((key, i) => {
+            return [key, values[i]];
+        }));
+
+    } catch (err) {
+        document.body.innerHTML = `<h1>Error: Page does not match any</h1>`;
+    }
 };
 
 const navigateTo = url => {
@@ -22,7 +27,7 @@ const navigateTo = url => {
 
 const router = async() => {
     const routes = [
-        { path: "", view: SearchBar},
+        { path: "", view: SearchBar },
         { path: "/dashboard", view: Dashboard },
         { path: "/orders", view: Orders },
         { path: "/products", view: Products },
@@ -40,13 +45,16 @@ const router = async() => {
 
     if (!match) {
         match = {
-            route: routes[0],
+            route: routes[0].path,
             result: [location.pathname]
         };
     }
 
 
     const view = new match.route.view(getParams(match));
+    //console.log(match.route.path)
+    //console.log(window.location.href)
+    //console.log(location.pathname)
 
     document.querySelector("#app").innerHTML = await view.getHtml();
 };

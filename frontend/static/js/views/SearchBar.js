@@ -12,9 +12,9 @@ fetch(`http://127.0.0.1:8000/products/`)
         let DropDown = document.querySelector(".dropdown-content");
         let DropData = document.querySelector("#myDropdown");
         const Search = document.querySelector('#searchBar');
-        
-        
-        for( let i=0; i < result.length; i++) {
+
+
+        for (let i = 0; i < result.length; i++) {
             DropDown.innerHTML += `
             <a href="/details/${result[i].id}" data-link>${result[i].title} - <small>${result[i].item_code}</small></a>`
         }
@@ -22,7 +22,7 @@ fetch(`http://127.0.0.1:8000/products/`)
         document.addEventListener('click', (e) => {
 
             DropDown.style.display = 'none';
-            
+
             if (e.target !== Search) {
                 DropDown.style.display = 'none';
             } else if (e.target == Search) {
@@ -31,26 +31,24 @@ fetch(`http://127.0.0.1:8000/products/`)
                     DropDown.classList.toggle("show");
                     var filter = Search.value.toUpperCase();
                     Searching(filter)
-                    })
-                }
-            })
-        
+                })
+            }
+        })
+
 
         function Searching(e) {
 
             var a, i, txtValue;
-            
+
             a = DropData.getElementsByTagName("a");
             for (i = 0; i < a.length; i++) {
                 txtValue = a[i].textContent || a[i].innerText;
+                console.log(txtValue.toUpperCase())
                 if (txtValue.toUpperCase().indexOf(e) > -1) {
                     a[i].style.display = "";
-                    console.log(a[i])
                 } else {
                     a[i].style.display = "none";
                 }
             }
         }
     })
-
-
