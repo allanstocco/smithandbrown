@@ -16,7 +16,7 @@ const getParams = match => {
         }));
 
     } catch (err) {
-        document.body.innerHTML = `<h1>Error: Page does not match any</h1>`;
+        window.location.href = "/dashboard"
     }
 };
 
@@ -52,9 +52,6 @@ const router = async() => {
 
 
     const view = new match.route.view(getParams(match));
-    //console.log(match.route.path)
-    //console.log(window.location.href)
-    //console.log(location.pathname)
 
     document.querySelector("#app").innerHTML = await view.getHtml();
 };
