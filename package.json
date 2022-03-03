@@ -15,7 +15,8 @@
     "echarts": "^5.3.0",
     "express": "^4.17.3",
     "express-session": "^1.17.2",
-    "fetch-node": "0.0.1"
+    "fetch-node": "0.0.1",
+    "node-fetch": "^2.6.7"
   },
   "repository": {
     "type": "git",
