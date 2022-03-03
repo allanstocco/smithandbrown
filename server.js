@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const session = require('express-session');
+const fetch = require('node-fetch');
 
 const app = express();
 
@@ -37,17 +38,21 @@ app.post('/auth', (req, res) => {
     const password = req.body.password;
 
     fetch("http://127.0.0.1:8000/login/")
+        .then(res => res.json())
+        .then(result => {
+            result.forEach(data => {
+                if (username == data.email) {
 
-    if (username == "allanstocco@project" && password == 123123) {
+                    req.session.loggedin = true;
+                    req.session.username = username;
 
-        req.session.loggedin = true;
-        req.session.username = username;
+                    res.redirect("/dashboard");
 
-        res.redirect("/dashboard");
-
-    } else {
-        res.redirect("/login")
-    }
+                } else {
+                    res.redirect("/login")
+                }
+            })
+        })
 });
 
 app.listen(process.env.PORT || 3000, () => console.log("Server running..."));
