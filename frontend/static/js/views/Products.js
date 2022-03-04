@@ -4,7 +4,7 @@ export default class extends AbstractView {
 
     constructor(params) {
         super(params);
-        this.setTitle("Products")
+
     }
 
     async getHtml() {

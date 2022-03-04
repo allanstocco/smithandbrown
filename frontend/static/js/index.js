@@ -4,6 +4,7 @@ import Products from "./views/Products.js";
 import Details from "./views/Details.js";
 import SearchBar from "./views/SearchBar.js";
 
+
 const pathToRegex = path => new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
 
 const getParams = match => {
@@ -68,3 +69,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
     router();
 });
+

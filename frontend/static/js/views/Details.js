@@ -1,51 +1,52 @@
 import AbstractView from "./AbstractView.js";
 
+
 export default class extends AbstractView {
     constructor(params) {
         super(params);
-        this.prodID = params.id
-        this.setTitle("Settings");
+        this.ProductID = params.id
     }
 
 
 
     async getHtml() {
-        fetch(`http://127.0.0.1:8000/details/${this.prodID}`)
+
+        fetch(`http://127.0.0.1:8000/details/${this.ProductID}`)
+
             .then(res => res.json())
             .then(data => {
-                const div = document.querySelector('#show-prod');
-                const PhotoDiv = document.querySelector('#show-photo');
+
+                const ProdDiv = document.querySelector('#show-prod');
+                const PhotoDiv = document.querySelector('.swiper-wrapper');
                 const showPhoto = []
 
 
+                function ShowProd(data) {
+                    return `
+                    <h1 class="p-title">${data.title}</h1>
+                    <p class="p-description">${data.description}</p>
+                    <div class="profileProducts">
+                        <h2>Price: </h2>
+                        <span>${data.price} GBP</span>
+                    </div>
+                    <div class="profileProducts">
+                        <h2>Category: </h2>
+                        <span>${data.category}</span>
+                    </div>
+                    <div class="profileProducts">
+                        <h2>Registered by: </h2><span>${data.user_creator}</span>
+                    </div>`
+                } ProdDiv.innerHTML = ShowProd(data)
+
+
+                // Get photos of data throught fetch
                 for (let photo of data.photos) {
                     showPhoto.push(photo.photosUploads)
                 };
 
-                function showPicture(value) {
-                    return `<img class="showPhoto" src="http://127.0.0.1:8000${value}">`;
-                };
-
-                div.innerHTML =
-                    `${showProd(data)}`
-
-                function showProd(data) {
-                    return `
-                    <h4>${data.title}</h4>
-                    <h4>${data.description}</h4>
-                    <h4>${data.price} GBP</h4>
-                    <h4>Category: ${data.category}</h4>
-                    <h4>Code: ${data.item_code}</h4>
-                    <h4>Creator: ${data.user_creator}</h4>
-                    `
-                }
-
                 for (let i = 0; i < showPhoto.length; i++) {
-                    PhotoDiv.innerHTML += `${showPicture(showPhoto[i])}`
+                    PhotoDiv.innerHTML += `<img class="swiper-slide" src="http://127.0.0.1:8000${showPhoto[i]}">`
                 };
-
-                PhotoDiv.innerHTML =
-                    `${showPicture(value)}`
             })
         return `
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
@@ -64,7 +65,15 @@ export default class extends AbstractView {
             </div>
         </div>
         <div class="row">
-        <div class="col-sm-6" id="show-photo"></div>
+        <div class="col-sm-6">
+            <div class="swiper">
+                <div class="swiper-wrapper"></div>
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-scrollbar"></div>
+            </div>
+        </div>
         <div class="col-sm-6" id="show-prod"></div>
         </div>
     </main>`;
