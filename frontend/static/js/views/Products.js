@@ -8,54 +8,6 @@ export default class extends AbstractView {
     }
 
     async getHtml() {
-
-        fetch(`http://127.0.0.1:8000/products/`)
-            .then(res => res.json())
-            .then(result => {
-                const myForm = document.querySelector('#myForm');
-
-                myForm.addEventListener('submit', (element) => {
-
-                    element.preventDefault();
-
-                    const code = document.getElementById('code').value;
-                    const title = document.getElementById('title').value;
-                    const description = document.getElementById('description').value;
-                    const price = document.getElementById('price').value;
-                    //const category = document.getElementById('category');
-
-                    fetch(`http://127.0.0.1:8000/products/`, {
-                        method: 'post',
-                        body: JSON.stringify({
-                            item_code: code,
-                            title: title,
-                            description: description,
-                            price: price,
-                            //category: category
-                        }),
-                    }).then(response => response.json())
-                        .then(res => {
-                            window.location.reload()
-                        })
-                })
-
-                result.forEach(data => {
-                    let div = document.querySelector('#t-body');
-                    div.innerHTML +=
-                        `
-                        <tr id='p-row-all'>
-                        <td>${data.item_code}</td>
-                        <td>${data.title}</td>
-                        <td>${data.description}</td>
-                        <td>${data.price}</td>
-                        <td>${data.category}</td>
-                        <td>${data.user_creator}</td>
-                        <td><a class="button" href="/details/${data.id}" data-link>Details</a></td>
-                        </tr>
-                        `;
-                })
-            })
-
         return `
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <div
@@ -135,5 +87,56 @@ export default class extends AbstractView {
                 </div>
             </main>`;
 
+    }
+
+    async after_render() {
+        fetch(`http://127.0.0.1:8000/products/`)
+            .then(res => res.json())
+            .then(result => {
+                result.forEach(data => {
+                    let div = document.querySelector('#t-body');
+                    div.innerHTML +=
+                        `
+                        <tr id='p-row-all'>
+                        <td>${data.item_code}</td>
+                        <td>${data.title}</td>
+                        <td>${data.description}</td>
+                        <td>${data.price}</td>
+                        <td>${data.category}</td>
+                        <td>${data.user_creator}</td>
+                        <td><a class="button" href="/details/${data.id}" data-link>Details</a></td>
+                        </tr>
+                        `;
+                })
+            })
+
+
+        const myForm = document.querySelector('#myForm');
+        myForm.addEventListener('submit', (element) => {
+
+            element.preventDefault();
+
+            const code = document.getElementById('code').value;
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+            const price = document.getElementById('price').value;
+            const category = document.getElementById('category');
+
+            fetch(`http://127.0.0.1:8000/products/`, {
+                method: 'post',
+                body: JSON.stringify({
+                    item_code: code,
+                    title: title,
+                    description: description,
+                    price: price,
+                    category: category
+                }),
+            })
+                .then(response => response.json())
+                .then(res => {
+                    window.location.reload()
+                })
+
+        })
     }
 }

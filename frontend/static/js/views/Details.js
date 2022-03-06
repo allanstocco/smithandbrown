@@ -7,47 +7,8 @@ export default class extends AbstractView {
         this.ProductID = params.id
     }
 
-
-
     async getHtml() {
 
-        fetch(`http://127.0.0.1:8000/details/${this.ProductID}`)
-
-            .then(res => res.json())
-            .then(data => {
-
-                const ProdDiv = document.querySelector('#show-prod');
-                const PhotoDiv = document.querySelector('.swiper-wrapper');
-                const showPhoto = []
-
-
-                function ShowProd(data) {
-                    return `
-                    <h1 class="p-title">${data.title}</h1>
-                    <p class="p-description">${data.description}</p>
-                    <div class="profileProducts">
-                        <h2>Price: </h2>
-                        <span>${data.price} GBP</span>
-                    </div>
-                    <div class="profileProducts">
-                        <h2>Category: </h2>
-                        <span>${data.category}</span>
-                    </div>
-                    <div class="profileProducts">
-                        <h2>Registered by: </h2><span>${data.user_creator}</span>
-                    </div>`
-                } ProdDiv.innerHTML = ShowProd(data)
-
-
-                // Get photos of data throught fetch
-                for (let photo of data.photos) {
-                    showPhoto.push(photo.photosUploads)
-                };
-
-                for (let i = 0; i < showPhoto.length; i++) {
-                    PhotoDiv.innerHTML += `<img class="swiper-slide" src="http://127.0.0.1:8000${showPhoto[i]}">`
-                };
-            })
         return `
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div
@@ -64,18 +25,65 @@ export default class extends AbstractView {
                 </button>
             </div>
         </div>
-        <div class="row">
-        <div class="col-sm-6">
-            <div class="swiper">
-                <div class="swiper-wrapper"></div>
-                <div class="swiper-pagination"></div>
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-button-next"></div>
-                <div class="swiper-scrollbar"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="swiper mySwiper">
+                        <div class="swiper-wrapper"></div>
+                        <div class="swiper-pagination"></div>
+                    </div>
+                </div>
+                <div class="col-sm-6" id="show-prod"></div>
             </div>
         </div>
-        <div class="col-sm-6" id="show-prod"></div>
-        </div>
     </main>`;
+    }
+
+    async after_render() {
+        fetch(`http://127.0.0.1:8000/details/${this.ProductID}`)
+
+            .then(res => res.json())
+            .then(data => {
+                const ProdDiv = document.querySelector('#show-prod');
+                const PhotoDiv = document.querySelector('.swiper-wrapper');
+                const showPhoto = []
+
+                function ShowProd(data) {
+                    return `
+                    <h1 class="p-title">${data.title}</h1>
+                    <p class="p-description">${data.description}</p>
+                    <div class="profileProducts">
+                        <h2>Price: </h2>
+                        <span>${data.price} GBP</span>
+                    </div>
+                    <div class="profileProducts">
+                        <h2>Category: </h2>
+                        <span>${data.category}</span>
+                    </div>
+                    <div class="profileProducts">
+                        <h2>Registered by: </h2><span>${data.user_creator}</span>
+                    </div>`
+                }
+
+                ProdDiv.innerHTML = ShowProd(data)
+
+
+                // Get photos of data throught fetch
+                for (let photo of data.photos) {
+                    showPhoto.push(photo.photosUploads)
+                };
+
+                for (let i = 0; i < showPhoto.length; i++) {
+                    PhotoDiv.innerHTML += `<img class="swiper-slide" src="http://127.0.0.1:8000${showPhoto[i]}">`
+                };
+            })
+
+
+        // Swiper JS
+        var swiper = new Swiper(".mySwiper", {
+            pagination: {
+                el: ".swiper-pagination",
+            },
+        });
     }
 }
