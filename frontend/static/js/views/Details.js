@@ -16,7 +16,7 @@ export default class extends AbstractView {
             <h1 class="h2">Dashboard</h1>
             <div class="btn-toolbar mb-2 mb-md-0">
                 <div class="btn-group me-2">
-                    <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+                    <a class="btn btn-sm btn-outline-secondary" href="/edit/${this.ProductID}" data-link>Edit</a>
                     <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
                 </div>
                 <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
@@ -50,18 +50,20 @@ export default class extends AbstractView {
 
                 function ShowProd(data) {
                     return `
-                    <h1 class="p-title">${data.title}</h1>
+                    <h1 class="p-title">
+                        <span>${data.title}</span>
+                        <span style="font-size:15px;">(${data.item_code})</span>
+                    </h1>
+                    <hr/>
                     <p class="p-description">${data.description}</p>
                     <div class="profileProducts">
-                        <h2>Price: </h2>
-                        <span>${data.price} GBP</span>
+                        <span class="">Price: ${data.price} GBP</span>
                     </div>
                     <div class="profileProducts">
-                        <h2>Category: </h2>
-                        <span>${data.category}</span>
+                        <span>Category: ${data.category}</span>
                     </div>
                     <div class="profileProducts">
-                        <h2>Registered by: </h2><span>${data.user_creator}</span>
+                        <span>Registered by: ${data.user_creator}</span>
                     </div>`
                 }
 

@@ -94,11 +94,11 @@ body {
     cursor: pointer;
 }
 
-#p-row-all {
+.p-row-all {
     cursor: pointer;
 }
 
-#p-row-all:hover {
+.p-row-all:hover {
     color: antiquewhite;
     background-color: rgb(64, 98, 161);
 }
@@ -163,13 +163,20 @@ body {
     width: 100%;
 }
 
-.show {display: block;}
+.show {
+    display: block;
+}
 
 @font-face {
     font-family: wurth;
     src: url('../fonts/WuerthExtraBoldCond.ttf');
     font-weight: bold;
- }
+}
+
+@font-face {
+    font-family: futura;
+    src: url('../fonts/FuturaCyrillicHeavy.ttf');
+}
 
 .p-title {
     margin-bottom: 1.2rem;
@@ -181,26 +188,26 @@ body {
 }
 
 .p-description {
-    font-family: Arial,Helvetica,sans-serif;
+    font-family: futura;
     font-size: 1rem;
-    font-weight: normal;
     line-height: 1.6;
-    color: #000;
-    text-align: left;
+    color: #636363;
+    position: relative;
+    z-index: 3;
+    clear: both;
+    margin: 0 0 12px 0;
 }
 
-.profileProducts > h2 {
-    display: inline;
+.profileProducts {
+    font-family: futura;
 }
-
-
 
 .swiper {
     width: 100%;
     height: 100%;
-  }
+}
 
-  .swiper-slide {
+.swiper-slide {
     text-align: center;
     font-size: 18px;
     background: #fff;
@@ -218,11 +225,15 @@ body {
     -ms-flex-align: center;
     -webkit-align-items: center;
     align-items: center;
-  }
+}
 
-  .swiper-slide img {
+.swiper-slide img {
     display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
-  }
+}
+
+/* #submitDate {
+    visibility: hidden;
+} */

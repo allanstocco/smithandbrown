@@ -3,6 +3,7 @@ import Orders from "./views/Orders.js";
 import Products from "./views/Products.js";
 import Details from "./views/Details.js";
 import SearchBar from "./views/SearchBar.js";
+import Editem from "./views/Editem.js";
 
 
 const pathToRegex = path => new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
@@ -26,13 +27,14 @@ const navigateTo = url => {
     router();
 };
 
-const router = async() => {
+const router = async () => {
     const routes = [
         { path: "", view: SearchBar },
         { path: "/dashboard", view: Dashboard },
         { path: "/orders", view: Orders },
         { path: "/products", view: Products },
-        { path: "/details/:id", view: Details }
+        { path: "/details/:id", view: Details },
+        { path: "/edit/:id", view: Editem}
     ];
 
     const potentialMatches = routes.map(route => {
@@ -54,8 +56,9 @@ const router = async() => {
 
     const view = new match.route.view(getParams(match));
 
+
     document.querySelector("#app").innerHTML = await view.getHtml();
-    await view.after_render();
+    view.after_render();
 };
 
 window.addEventListener("popstate", router);

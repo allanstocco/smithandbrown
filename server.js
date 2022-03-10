@@ -15,13 +15,14 @@ app.use(session({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
 app.use("/static", express.static(path.resolve(__dirname, "frontend", "static")));
 
 app.get("/login", (req, res) => {
     res.sendFile(path.join(__dirname, "frontend", "login.html"));
 })
 
-app.get('/*', function(req, res) {
+app.get('/*', function (req, res) {
     if (!req.session.loggedin) {
 
         res.redirect("/login")

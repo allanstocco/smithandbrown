@@ -39,6 +39,7 @@ fetch(`http://127.0.0.1:8000/products/`)
 
         function Searching(e) {
 
+            // Fetching product in the top search bar
             var a, i, txtValue;
 
             a = DropData.getElementsByTagName("a");
