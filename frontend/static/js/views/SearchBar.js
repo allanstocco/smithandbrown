@@ -17,7 +17,7 @@ fetch(`http://127.0.0.1:8000/products/`)
 
         for (let i = 0; i < result.length; i++) {
             DropDown.innerHTML += `
-            <a href="/details/${result[i].id}" data-link>${result[i].title} - <small>${result[i].item_code}</small></a>`
+            <a href="/products/details/${result[i].id}" data-link>${result[i].title} - <small>${result[i].item_code}</small></a>`
         }
 
         document.addEventListener('click', (e) => {

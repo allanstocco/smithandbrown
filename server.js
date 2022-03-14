@@ -49,7 +49,6 @@ app.post('/auth', (req, res) => {
                     req.session.username = username;
 
                     res.redirect("/dashboard");
-
                 } else {
                     res.redirect("/login")
                 }

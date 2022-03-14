@@ -13,16 +13,17 @@ export default class extends AbstractView {
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div
             class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h2">Dashboard</h1>
             <div class="btn-toolbar mb-2 mb-md-0">
                 <div class="btn-group me-2">
-                    <a class="btn btn-sm btn-outline-secondary" href="/edit/${this.ProductID}" data-link>Edit</a>
-                    <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+                <a type="button" class="btn btn-sm btn-outline-secondary" href="/products" data-link>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-return-left" viewBox="0 0 16 16" data-link>Back
+                                <path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5z" data-link/>
+                                Back
+                            </svg>
+                            Back
+                        </a>
+                <a class="btn btn-sm btn-outline-secondary" href="/edit/${this.ProductID}" data-link>Edit</a>
                 </div>
-                <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-                    <span data-feather="calendar"></span>
-                    This week
-                </button>
             </div>
         </div>
         <div class="container">
@@ -57,13 +58,10 @@ export default class extends AbstractView {
                     <hr/>
                     <p class="p-description">${data.description}</p>
                     <div class="profileProducts">
-                        <span class="">Price: ${data.price} GBP</span>
-                    </div>
-                    <div class="profileProducts">
-                        <span>Category: ${data.category}</span>
-                    </div>
-                    <div class="profileProducts">
                         <span>Registered by: ${data.user_creator}</span>
+                    </div>
+                    <div class="profileProducts">
+                        <span>Registered: ${data.created}</span>
                     </div>`
                 }
 
@@ -72,11 +70,11 @@ export default class extends AbstractView {
 
                 // Get photos of data throught fetch
                 for (let photo of data.photos) {
-                    showPhoto.push(photo.photosUploads)
+                    showPhoto.push(photo.image.full_size)
                 };
 
                 for (let i = 0; i < showPhoto.length; i++) {
-                    PhotoDiv.innerHTML += `<img class="swiper-slide" src="http://127.0.0.1:8000${showPhoto[i]}">`
+                    PhotoDiv.innerHTML += `<img style="width: 500px; height:500px" class="swiper-slide" src="http://127.0.0.1:8000${showPhoto[i]}">`
                 };
             })
 
