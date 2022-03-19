@@ -21,10 +21,10 @@ export default class extends AbstractView {
                     <tr class="p-row-all" id="${id}" data-link>
                         <td>${item_code}</td>
                         <td>${title}</td>
-                        <td>${description}</td>
-                        <td>${created}</td>
+                        <td>${description.substring(0,35)}...</td>
+                        <td>${moment(created).format('DD/MM/YYYY')}</td>
                         <td>${user_creator}</td>
-                        <td><a class="btn btn-sm btn-outline-secondary" href="/products/details/${id}" data-link>Details</a></td>
+                        <td><a class="btn btn-sm btn btn-outline-dark" href="/products/details/${id}" data-link>Details</a></td>
                     </tr>
                 `
         ).join('\n');
@@ -36,13 +36,13 @@ export default class extends AbstractView {
                     <h1 class="h2">Items</h1>
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <div class="btn-group me-2">
-                            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal"
+                            <button type="button" class="btn btn-sm btn btn-outline-dark" data-bs-toggle="modal"
                                 data-bs-target="#modal">Add</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+                            <button type="button" class="btn btn-sm btn btn-outline-dark">Export</button>
                         </div>
                         <form>
                             <input type="date" id="date" name="date" class="btn btn-sm btn-outline-secondary">
-                            <button type="submit" id="submitDate" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">Go</button>
+                            <button type="submit" id="submitDate" class="btn btn-sm btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">Go</button>
                         </form>
                         <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-lg">
@@ -197,71 +197,5 @@ export default class extends AbstractView {
     }
 
 }
-
-/* fetch('http://127.0.0.1:8000/products/', {
-    method: 'post',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-        item_code: item_code,
-        title: title,
-        description: description,
-        image: pictures
-    }),
-})
-    .then(response => response.json())
-    .then(res => {
-        console.log(res)
-        window.location.reload()
-    })
-}); */
-
-
-
-
-        // Form method to get new product added
-
-/* document.querySelector('#upload').addEventListener('click', doUpload, false);
-const fileField = document.querySelector('#filesToUpload');
-const statusDiv = document.querySelector('#status');
-const item_code = document.querySelector('#item_code').value;
-const title = document.querySelector('#title').value;
-const description = document.querySelector('#description').value;
-
-
-async function doUpload(e) {
-    e.preventDefault();
-    statusDiv.innerHTML = '';
-
-    let totalFilesToUpload = fileField.files.length;
-
-    //nothing was selected 
-    if (totalFilesToUpload === 0) {
-        statusDiv.innerHTML = 'Please select one or more files.';
-        return;
-    }
-
-    for (let i = 0; i < totalFilesToUpload; i++) {
-        statusDiv.innerHTML = `Working on file ${i + 1} of ${totalFilesToUpload}`;
-        let resp = await uploadFile(fileField.files[i]);
-        console.log(`Done with ${i + 1} item.`);
-    }
-
-    statusDiv.innerHTML = 'All complete.';
-    fileField.value = '';
-}
-
-async function uploadFile(f) {
-    let form = new FormData();
-    form.append('item_code', item_code)
-    form.append('title', title)
-    form.append('description', description)
-    form.append('image', f);
-    let resp = await fetch('http://127.0.0.1:8000/products/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, mode: 'no-cors', body: form });
-    let data = await (resp => resp.json()).then(res => console.log(res));
-
-    console.log(data)
-
-    return data;
-}*/
 
 

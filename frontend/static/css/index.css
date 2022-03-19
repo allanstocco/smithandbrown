@@ -237,3 +237,110 @@ body {
 /* #submitDate {
     visibility: hidden;
 } */
+
+#comment {
+    margin-top: 25%;
+}
+
+.textarea {
+    position: relative;
+    border: 2px solid #ddd;
+}
+
+#textarea-btn {
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+    width: 60px;
+}
+
+#extarea-field {
+    position: relative;
+    border: none;
+    resize: none;
+    outline: none;
+}
+
+/* Sticky notes */
+
+
+.h2-note {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.p-note .box-note {
+    font-family: 'Reenie Beanie';
+    font-size: 15px;
+}
+
+.ul-note, .li-note {
+    list-style: none;
+}
+
+.ul-note {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.ul-note .li-note .a-note {
+    text-decoration: none;
+    color: #000;
+    background: #ffc;
+    display: block;
+    height: 15em;
+    width: 15em;
+    padding: 1em;
+    box-shadow: 5px 5px 7px rgba(33, 33, 33, .7);
+    transform: rotate(-6deg);
+    transition: transform .15s linear;
+}
+
+.ul-note .li-note:nth-child(even) .a-note {
+    transform: rotate(4deg);
+    position: relative;
+    top: 5px;
+    background: #cfc;
+}
+
+.ul-note .li-note:nth-child(3n) .a-note {
+    transform: rotate(-3deg);
+    position: relative;
+    top: -5px;
+    background: #ccf;
+}
+
+.ul-note .li-note:nth-child(5n) .a-note {
+    transform: rotate(5deg);
+    position: relative;
+    top: -10px;
+}
+
+.ul-note .li-note .a-note:hover, .ul-note .li-note .a-note:focus {
+    box-shadow: 10px 10px 7px rgba(0, 0, 0, .7);
+    transform: scale(1.25);
+    position: relative;
+    z-index: 5;
+}
+
+.ul-note .li-note {
+    margin: 1em;
+}
+
+
+
+#nav-link:hover, #nav-link:active {
+    color: blue;
+}
+
+.input-orders {
+    font-size: 16px;
+    font-family: inherit;
+    padding: 0.25em 0.5em;
+    border: 2px solid var(--input-border);
+    border-radius: 4px;
+    transition: 180ms ease-in-out;
+    color: #777;
+    background-color: #eee;
+}

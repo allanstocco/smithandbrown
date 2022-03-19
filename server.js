@@ -39,21 +39,31 @@ app.post('/auth', (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
 
-    fetch("http://127.0.0.1:8000/login/")
-        .then(res => res.json())
-        .then(result => {
-            result.forEach(data => {
-                if (username == data.email) {
-
-                    req.session.loggedin = true;
-                    req.session.username = username;
-
-                    res.redirect("/dashboard");
-                } else {
-                    res.redirect("/login")
-                }
-            })
+    fetch("http://127.0.0.1:8000/signin", {
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            "email": username,
+            "password": password,
         })
+    }).then(res => res.json())
+        .then(result => {
+            console.log(result.status)
+            if (result.success == "True") {
+                
+                req.session.loggedin = true;
+                req.session.username = username;
+                req.session.username = password;
+
+                res.redirect("/dashboard");
+
+            } else {
+
+                res.redirect("/login")
+            }
+        });
 });
 
 app.listen(process.env.PORT || 3000, () => console.log("Server running..."));
