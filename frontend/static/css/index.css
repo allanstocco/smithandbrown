@@ -98,7 +98,16 @@ body {
     cursor: pointer;
 }
 
+.order-row-all {
+    cursor: pointer;
+}
+
 .p-row-all:hover {
+    color: antiquewhite;
+    background-color: rgb(64, 98, 161);
+}
+
+.order-row-all:hover {
     color: antiquewhite;
     background-color: rgb(64, 98, 161);
 }
@@ -331,16 +340,28 @@ body {
 
 
 #nav-link:hover, #nav-link:active {
-    color: blue;
+    color: rgb(0, 0, 160);
 }
 
 .input-orders {
-    font-size: 16px;
-    font-family: inherit;
+    font-size: 14px;
     padding: 0.25em 0.5em;
     border: 2px solid var(--input-border);
     border-radius: 4px;
     transition: 180ms ease-in-out;
     color: #777;
     background-color: #eee;
+}
+
+.orders-list {
+    text-transform: uppercase;
+}
+
+#t-head-orders {
+    font-size: 12px;
+    text-align: center;
+}
+
+#t-body {
+    text-align: center;
 }

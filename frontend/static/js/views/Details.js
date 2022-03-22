@@ -119,7 +119,7 @@ export default class extends AbstractView {
 
 
 
-        
+
 
         // Swiper JS
         var swiper = new Swiper(".mySwiper", {
@@ -130,7 +130,7 @@ export default class extends AbstractView {
 
 
         // Remarks Post
-                
+
         document.querySelector('#textarea-btn').addEventListener('click', (e) => {
             e.preventDefault()
 
@@ -152,34 +152,94 @@ export default class extends AbstractView {
 
 
         // Edit Note
+
+
+
+
         document.querySelector('#comment-box').addEventListener('click', (e) => {
-            let id = e.target.id
-            let content = e.target.innerHTML
-            let box = document.getElementsByClassName('box-note');
+
+            e.preventDefault()
+
+            let product_id = this.ProductID;
+            let id = e.target.id;
+            let content = e.target.innerHTML;
+
+            let box = document.getElementsByClassName("box-note");
+            let save = document.querySelector(`.btn-note-${id}`);
 
             if (e.target.className === "box-note") {
                 for (let i = 0; i < box.length; i++) {
                     if (box[i].id == id) {
-                        console.log(id)
-                        console.log(content)
-                        document.getElementById(id)
-                        console.log(document.querySelector(`.btn-note-${id}`).style.display = 'block');
-                      
-                        
+                        save.style.display = "block";
                     }
                 }
-
             }
+
 
             if (e.target.className !== "box-note") {
                 for (let i = 0; i < box.length; i++) {
-                    document.querySelector(`.btn-note-${box[i].id}`).style.display = 'none';
+                    let save = document.querySelector(`.btn-note-${box[i].id}`);
+                    save.style.display = "none";
                 }
             }
-        })
+
+            document.querySelector(`.btn-note-${id}`).addEventListener('click', (e) => {
+
+                e.preventDefault()
+
+                console.log(content)
+                submit(id, content, product_id);
+
+            }, false);
+
+        }, {});
+
+        function submit(id, content, product_id) {
+
+            fetch(`http://127.0.0.1:8000/comment/${id}`, {
+                method: "put",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "products": product_id,
+                    "content": content
+                }),
+            }).then(res => res.json())
+                .then(response => {
+                    console.log(response)
+                })
+
+        }
 
 
-       
+
     }
 }
 
+
+
+
+
+/*
+
+if (e.target.className === "box-note") {
+    for (let i = 0; i < box.length; i++) {
+        if (box[i].id == id) {
+            console.log(id)
+            console.log(content)
+            document.getElementById(id)
+            console.log(document.querySelector(`.btn-note-${id}`).style.display = 'block');
+          
+            
+        }
+    }
+
+}
+
+if (e.target.className !== "box-note") {
+    for (let i = 0; i < box.length; i++) {
+        document.querySelector(`.btn-note-${box[i].id}`).style.display = 'none';
+    }
+} */

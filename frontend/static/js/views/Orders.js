@@ -13,14 +13,18 @@ export default class extends AbstractView {
         const data = await response.json();
         const orders = data
 
+
+
         const ordersList = orders.map(
-            ({ Qty, job_number, description, code, supplier }) => `
-                    <tr class="p-row-all" data-link>
-                        <td>${Qty}</td>
+            ({ id, qty, job_number, description, code, supplier, requested, received }) => `
+                    <tr class="order-row-all" id="${id}">
+                        <td>${qty}</td>
                         <td>${job_number}</td>
-                        <td>${description}</td>
+                        <td>${description.substring(0, 20)}</td>
                         <td>${code}</td>
                         <td>${supplier}</td>
+                        <td>${moment(requested).format('DD/MM/YYYY')}</td>
+                        <td><input class="form-check-input" type="checkbox" id="${id}" ${received}></td>
                     </tr>
                 `
         ).join('\n');
@@ -34,16 +38,31 @@ export default class extends AbstractView {
             </div>
             <div id="add-orders-div">
                 <div id="cont" class="table-responsive-lg"></div>
+                <p id="info-proc"></p>
                 <p>
                     <input type="button" id="new-order" class="btn btn-sm btn-outline-secondary" value="New Order">
                     <input class="btn btn-sm btn-outline-secondary" type="button" id="btn-add" value="Add Request">
                     <input class="btn btn-sm btn-outline-secondary" type="button" id="btn-submit" value="Submit">
                 </p>
             </div>
+            <br>
+            <br>
+            <br>
             <div id="show-orders-div">
                 <div class="table-responsive">
-                    <table class="table table-md">
-                        <tbody id="t-body">${ordersList}</tbody>
+                    <table class="table table-sm">
+                        <thead id="t-head-orders">
+                            <tr>
+                                <th>Qty</th>
+                                <th>Title</th>
+                                <th>Description</th>
+                                <th>Code</th>
+                                <th>Supplier</th>
+                                <th>Ordered</th>
+                                <th>Accepted/Delivered</th>
+                            </tr>
+                        </thead>
+                        <tbody id="t-body" class="orders-list">${ordersList}</tbody>
                     </table>
                 </div>
             </div>
@@ -54,9 +73,13 @@ export default class extends AbstractView {
 
         let arrHead = [];
         let arrOrders = [];
-        arrHead = ['Qty', 'Job', 'Description', 'Code', 'Supplier', ''];
+
+        arrHead = ['Qty', 'Job', 'Description', 'Code', 'Supplier'];
 
         document.getElementById('cont').style.display = 'none';
+        document.getElementById('btn-add').disabled = true;
+        document.getElementById('btn-submit').disabled = true;
+        let info = document.getElementById('info-proc');
 
 
         function createTable() {
@@ -74,6 +97,8 @@ export default class extends AbstractView {
             div.appendChild(empTable);
         }
 
+
+
         createTable()
         function addRow() {
 
@@ -88,31 +113,35 @@ export default class extends AbstractView {
                 var td = document.createElement('td');
                 td = tr.insertCell(c);
 
-                if (c == 5) {
-                    var button = document.createElement('input');
-                    button.setAttribute('type', 'button');
-                    button.setAttribute('value', 'Remove');
-                    button.setAttribute('class', 'input-orders btn btn-sm btn-outline-secondary');
-                    button.setAttribute('id', 'btn-delete');
 
-                    td.appendChild(button);
-                }
-                else {
-                    var ele = document.createElement('input');
-                    ele.setAttribute('type', 'text');
-                    ele.setAttribute('value', '');
-                    ele.setAttribute('class', 'input-orders');
-                    ele.setAttribute('style', 'text-transform:uppercase');
+                var ele = document.createElement('input');
+                ele.setAttribute('type', 'text');
+                ele.setAttribute('value', '');
+                ele.setAttribute('class', `input-orders-${c}`);
+                ele.setAttribute('style', 'text-transform:uppercase');
 
-                    td.appendChild(ele);
+                td.appendChild(ele);
+
+
+                let inputs = document.querySelector(`.input-orders-${c}`);
+                inputs.onchange = () => {
+                    if (inputs.value === '') {
+                        document.getElementById('btn-add').disabled = true;
+                    } else {
+                        document.getElementById('btn-add').disabled = false;
+                    }
                 }
+
             }
-        }
+
+            info.innerHTML = 'Fill in all fields and press Add Request to validate the order.';
+        };
+
 
         function removeRow(oButton) {
             var empTab = document.getElementById('empTable');
             empTab.deleteRow(oButton);
-        }
+        };
 
         function addOrder(arrOrders) {
 
@@ -129,7 +158,9 @@ export default class extends AbstractView {
 
             }
             arrOrders.push(Values)
-        }
+            info.innerHTML = 'Make a New Order or Submit your order.';
+            document.getElementById('btn-submit').disabled = false;
+        };
 
         function submitOrder() {
 
@@ -142,28 +173,73 @@ export default class extends AbstractView {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        'Qty': arrOrders[i]['Qty'],
+                        'qty': arrOrders[i]['Qty'],
                         'job_number': arrOrders[i]['Job'],
                         'description': arrOrders[i]['Description'],
                         'code': arrOrders[i]['Code'],
                         'supplier': arrOrders[i]['Supplier']
                     }),
                 })
-                window.location.reload()
+                info.innerHTML = `Making order ${i + 1} of ${arrOrders.length}`
             }
-            console.log(arrOrders)
-        }
-
+            window.location.reload();
+            console.log(arrOrders);
+        };
 
         document.querySelector('#new-order').addEventListener('click', (e) => {
             addRow();
-        }, false)
+        }, false);
 
         document.querySelector('#btn-add').addEventListener('click', () => {
             addOrder(arrOrders)
-        })
+        });
         document.querySelector('#btn-submit').addEventListener('click', () => {
             submitOrder();
+        });
+
+
+        // Toggle - Accepted/Delivered
+
+        let table = document.querySelector('.orders-list');
+
+        table.addEventListener('click', (e) => {
+
+            e.preventDefault()
+
+            let ipt = e.target.id
+            // If checked order is accepted
+            if (e.target.checked) {
+                fetch(`http://127.0.0.1:8000/orders/${ipt}`, {
+                    method: 'put',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "received": "checked"
+                    }),
+                }).then(res => res.json())
+                    .then(response => {
+                        e.target.checked = true;
+                    })
+            } else {
+                // If uncheck order was not accepted
+                fetch(`http://127.0.0.1:8000/orders/${ipt}`, {
+                    method: 'put',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "received": ""
+                    }),
+                }).then(res => res.json())
+                    .then(response => {
+                        e.target.checked = false;
+                    })
+            }
         })
+
+
     }
 }

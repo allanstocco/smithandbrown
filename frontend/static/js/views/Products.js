@@ -14,14 +14,13 @@ export default class extends AbstractView {
         const response = await fetch(apiUrl);
         const data = await response.json();
         const items = data
-
-
+        // Render mapping throught list
         const itemList = items.map(
             ({ id, item_code, title, description, created, user_creator }) => `
                     <tr class="p-row-all" id="${id}" data-link>
                         <td>${item_code}</td>
                         <td>${title}</td>
-                        <td>${description.substring(0,35)}...</td>
+                        <td>${description.substring(0, 35)}...</td>
                         <td>${moment(created).format('DD/MM/YYYY')}</td>
                         <td>${user_creator}</td>
                         <td><a class="btn btn-sm btn btn-outline-dark" href="/products/details/${id}" data-link>Details</a></td>
@@ -38,7 +37,6 @@ export default class extends AbstractView {
                         <div class="btn-group me-2">
                             <button type="button" class="btn btn-sm btn btn-outline-dark" data-bs-toggle="modal"
                                 data-bs-target="#modal">Add</button>
-                            <button type="button" class="btn btn-sm btn btn-outline-dark">Export</button>
                         </div>
                         <form>
                             <input type="date" id="date" name="date" class="btn btn-sm btn-outline-secondary">
@@ -90,6 +88,16 @@ export default class extends AbstractView {
                                             <label for="" class="col-form-label">Description</label>
                                             <textarea class="form-control" id="description"></textarea>
                                         </div>
+                                        <div class="col-lg">
+                                            <label for="" class="col-form-label">Category</label>
+                                            <select class="form-select" id="">
+                                                <option selected></option>                                           
+                                                <option value="Spray">Spray</option>                                           
+                                                <option value="Machinery">Machinery</option>                                           
+                                                <option value="General Stock">General Stock</option>                                           
+                                                <option value="Joinery">Joinery</option>                                           
+                                           </select>
+                                        </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button class="btn btn-primary" type="submit" id="upload">Create</button>
@@ -121,13 +129,13 @@ export default class extends AbstractView {
 
     async after_render() {
 
-        // Searching from top input date
+        // Filtering searches by date
         document.querySelector('#submitDate').addEventListener("click", Filter, false);
 
         async function Filter(e) {
-
             e.preventDefault();
 
+            // Fetch Products
             const apiUrl = `http://127.0.0.1:8000/products/`;
             const response = await fetch(apiUrl);
             const data = await response.json();
@@ -137,9 +145,14 @@ export default class extends AbstractView {
             const noneFilter = document.querySelector('#no-content-filter');
             const date = document.querySelector('#date').value;
 
+            // Render in modal once any date was picked
             filter.innerHTML = '';
             for (let i = 0; i < items.length; i++) {
-                if (items[i].created === date) {
+                if (items.length > 0 && items[i].created === date) {
+                    noneFilter.innerHTML = `
+                    <tr>
+                        <td>${i + 1} items found.</td>
+                    </tr>`;
                     filter.innerHTML += `
                         <tr scope="row" class="p-row-all" id="${items[i].id}" data-link>
                             <td>${items[i].item_code}</td>
@@ -148,14 +161,14 @@ export default class extends AbstractView {
                         </tr>`
                 } else {
                     noneFilter.innerHTML = `
-                        <tr>
-                            <td>There is a total of ${i + 1} items registered in the database.</td>
-                        </tr>`;
+                    <tr>
+                        <td>Could not find any for this date.</td>
+                    </tr>`;
                 };
             };
-
         };
 
+        // Add Product method
         document.querySelector('#upload').addEventListener('click', (e) => {
             e.preventDefault();
 
@@ -174,7 +187,6 @@ export default class extends AbstractView {
                 statusDiv.innerHTML = 'Please select one or more files.';
                 return;
             }
-
 
             const formData = new FormData();
             for (let i = 0; i < totalFilesToUpload; i++) {

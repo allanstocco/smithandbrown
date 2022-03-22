@@ -4,6 +4,9 @@ const session = require('express-session');
 const fetch = require('node-fetch');
 
 
+
+
+
 const app = express();
 
 app.use(session({
@@ -28,7 +31,7 @@ app.get('/*', function (req, res) {
         res.redirect("/login")
 
     } else {
-
+        console.log(res)
         res.sendFile(path.join(__dirname, "frontend", "index.html"));
     }
 });
@@ -50,12 +53,11 @@ app.post('/auth', (req, res) => {
         })
     }).then(res => res.json())
         .then(result => {
-            console.log(result.status)
             if (result.success == "True") {
-                
+
                 req.session.loggedin = true;
                 req.session.username = username;
-                req.session.username = password;
+                req.session.password = password;
 
                 res.redirect("/dashboard");
 

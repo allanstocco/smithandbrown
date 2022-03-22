@@ -12,12 +12,7 @@ export default class extends AbstractView {
             <div
                 class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">Dashboard</h1>
-                <div class="btn-toolbar mb-2 mb-md-0">
-                    <div class="btn-group me-2">
-                        <button type="button" class="btn btn-sm btn btn-outline-dark">Share</button>
-                        <button type="button" class="btn btn-sm btn btn-outline-dark">Export</button>
-                    </div>
-                </div>
+                <div class="btn-toolbar mb-2 mb-md-0"></div>
             </div>
             <div class="row">
                 <div class="col-sm-6">
@@ -32,12 +27,18 @@ export default class extends AbstractView {
     }
 
     async after_render() {
-        
+
+       
+        const BChartData = `http://127.0.0.1:8000/orders`;
+        const Bresponse = await fetch(BChartData);
+        const Bar_data = await Bresponse.json();
+        const products = Bar_data;
+
+
+
         const bar = document.querySelector('#myChartBar');
         const line = document.querySelector('#myChartLine');
 
-        var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
-        var yValues = [2, 49, 44, 24, 15];
         var barColors = [
             'rgba(255, 99, 132, 0.2)',
             'rgba(54, 162, 235, 0.2)',
@@ -55,12 +56,15 @@ export default class extends AbstractView {
             'rgba(255, 159, 64, 1)'
         ]
 
+
+        var xValues = ["Spray", "Machinery", "General Stock", "Joinery"];
+        var yValues = [2, 49, 44, 24];
+
         new Chart(bar, {
             type: 'bar',
             data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                labels: xValues,
                 datasets: [{
-                    label: xValues,
                     data: yValues,
                     backgroundColor: barColors,
                     borderColor: barBorderColor,
@@ -68,6 +72,13 @@ export default class extends AbstractView {
                 }]
             },
             options: {
+                legend: {
+                    display: false
+                },
+                title: {
+                    display: true,
+                    text: 'Storage report'
+                },
                 scales: {
                     y: {
                         beginAtZero: true
@@ -76,16 +87,52 @@ export default class extends AbstractView {
             }
         });
 
+    
+        // Polar Area Chart Data
+        const PAChartData = `http://127.0.0.1:8000/orders`;
+        const PA_response = await fetch(PAChartData);
+        const PA_data = await PA_response.json();
+        const orders = PA_data;
+
+        let accept = 0;
+        function order_accepted(accept) {
+            for (var i = 0; i < orders.length; i++) {
+                if (orders[i].received === "checked") {
+                    accept += 1;
+                }
+            }
+            return accept;
+        }
+
+        let unaccept = 0;
+        function order_unaccept(unaccept) {
+            for (var i = 0; i < orders.length; i++) {
+                if (orders[i].received !== "checked") {
+                    unaccept += 1;
+                }
+            }
+            return unaccept;
+        }
+
+        var polar_xValues = ["Orders Accepted", "Orders in queue"];
+        var polar_yValues = [order_accepted(accept), order_unaccept(unaccept)];
+
         new Chart(line, {
             type: "polarArea",
             data: {
-                labels: xValues,
+                labels: polar_xValues,
                 datasets: [{
                     borderColor: barBorderColor,
                     backgroundColor: barColors,
                     borderWidth: 1,
-                    data: yValues
+                    data: polar_yValues
                 }],
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: 'Orders report'
+                },
             }
         });
     }
