@@ -31,7 +31,7 @@ app.get('/*', function (req, res) {
         res.redirect("/login")
 
     } else {
-        console.log(res)
+
         res.sendFile(path.join(__dirname, "frontend", "index.html"));
     }
 });
@@ -51,21 +51,20 @@ app.post('/auth', (req, res) => {
             "email": username,
             "password": password,
         })
-    }).then(res => res.json())
-        .then(result => {
-            if (result.success == "True") {
+    })
 
-                req.session.loggedin = true;
-                req.session.username = username;
-                req.session.password = password;
+    if (username && password) {
+        
+        req.session.loggedin = true;
+        req.session.username = username;
+        req.session.password = password;
 
-                res.redirect("/dashboard");
+        res.redirect("/dashboard");
 
-            } else {
+    } else {
 
-                res.redirect("/login")
-            }
-        });
-});
+        res.redirect("/login")
+    }
+})
 
 app.listen(process.env.PORT || 3000, () => console.log("Server running..."));

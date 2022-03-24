@@ -36,19 +36,43 @@ export default class extends AbstractView {
                 </div>
                 <div class="col-sm-6"> 
                     <div id="show-prod"></div>
+                    <div class="add-to-order">
+                        <a data-bs-toggle="modal" data-bs-target="#exampleModal">Get this product ordered</a>
+                    </div> 
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-sm">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h4>Order request<h4>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <label>Job Reference:</label>
+                                <input class="form-control" type="text" id="job"/>
+                            </div>
+                            <div class="modal-body">
+                                <label>Quantity:</label>
+                                <input class="form-control" type="text" id="quantity"/>
+                            </div>
+                            <div class="modal-footer">
+                                <button id="add-to-order-btn" type="button" class="btn btn-sm btn-outline-secondary">Order</button>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
                     <div id="comment" class="form-group mx-sm-3 mb-2"><hr/>
-                        <label><h4>Notes:</h4></label>
-                        <div class="textarea">
-                            <textarea id="textarea-field" class="form-control" type="text" rows="4" cols="50"></textarea>
-                            <button id="textarea-btn" class="btn btn-sm btn-outline-secondary">Done!</button>
-                        </div
+                        <h4>Notes:</h4>
+                        <div id="textarea">
+                            <textarea id="textarea-field" class="form-control" type="text" rows="4" cols="30"></textarea>
+                            <button id="textarea-btn" class="btn btn-sm btn-inline-secondary">Done!</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <hr/>   
-        <div class="container">
-            <div class="row row-cols-4" id="comment-box"></div>
+        <br>
+        <div id="container-notes" class="container-fluid">
+            <div class="row" id="comment-box"></div>
         </div> 
      
     </main>`;
@@ -75,6 +99,12 @@ export default class extends AbstractView {
                     <hr/>
                     <p class="p-description">${data.description}</p>
                     <div class="profileProducts">
+                        <span>Category: ${data.category}</span>
+                    </div>
+                    <div class="profileProducts">
+                        <span>Supplier: ${data.supplier}</span>
+                    </div>
+                    <div class="profileProducts">
                         <span>Registered by: ${data.user_creator}</span>
                     </div>
                     <div class="profileProducts">
@@ -91,7 +121,7 @@ export default class extends AbstractView {
                 };
 
                 for (let i = 0; i < showPhoto.length; i++) {
-                    PhotoDiv.innerHTML += `<img style="width: 500px; height:500px" class="swiper-slide" src="http://127.0.0.1:8000${showPhoto[i]}">`
+                    PhotoDiv.innerHTML += `<img style="width: 500px; height:500px" id="prod-img" class="swiper-slide" src="http://127.0.0.1:8000${showPhoto[i]}">`
                 };
 
                 // Get Remarks of data throught fetch
@@ -102,24 +132,55 @@ export default class extends AbstractView {
 
                 for (let i = 0; i < showComments.length; i++) {
                     CommentDiv.innerHTML += `
-                            <div class="col">
-                                <ul class="ul-note">
-                                    <li id="comment-box" class="li-note">
-                                        <div class="a-note">
-                                            <h2 class="h2-note">${showComments[i].user}</h2>
-                                            <p class="p-note">${moment(showComments[i].created).format('DD/MM/YYYY')}</p>
-                                            <p class="box-note" id="${showComments[i].id}" contenteditable>${showComments[i].content}</p>
-                                            <button type="submit" class="btn btn-link btn-sm btn-note-${showComments[i].id}" id="submit" style="display: none;">Save</button>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>`
+                    <div class="col-6 col-sm-3">
+                        <ul class="ul-note">
+                            <li id="comment-box" class="li-note">
+                                <div class="a-note">
+                                    <h2 class="h2-note">${showComments[i].user}</h2>
+                                    <p class="p-note">${moment(showComments[i].created).format('DD/MM/YYYY')}</p>
+                                    <p class="box-note" id="${showComments[i].id}" contenteditable>${showComments[i].content}</p>
+                                    <button type="submit" class="btn btn-link btn-sm btn-note-${showComments[i].id}" id="submit" style="display: none;">Save</button>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>`
                 }
             })
 
+        // Add to Order
+        const apiUrl = `http://127.0.0.1:8000/edit/${this.ProductID}`;
+        const resp = await fetch(apiUrl);
+        const data = await resp.json();
+        const items = data;
 
+        document.querySelector('#add-to-order-btn').addEventListener('click', (e) => {
+            e.preventDefault()
 
+            let qty = document.querySelector('#quantity').value
+            let job = document.querySelector('#job').value
+            let description = items.title;
+            let code = items.item_code;
+            let supplier = items.supplier
 
+            fetch(`http://127.0.0.1:8000/orders/`, {
+                method: 'post',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "qty": qty,
+                    "job_number": job,
+                    "description": description,
+                    "code": code,
+                    "supplier": supplier
+                }),
+            }).then(result => result.json())
+                .then(response => {
+                    window.location.href = 'http://127.0.0.1:3000/orders';
+                })
+
+        });
 
         // Swiper JS
         var swiper = new Swiper(".mySwiper", {
@@ -147,14 +208,16 @@ export default class extends AbstractView {
                         "products": this.ProductID,
                         "content": comment
                     })
+                }).then(res => res.json())
+                .then(response => {
+                    window.location.reload()
                 })
         });
 
 
         // Edit Note
 
-
-
+        const note = {}
 
         document.querySelector('#comment-box').addEventListener('click', (e) => {
 
@@ -173,7 +236,7 @@ export default class extends AbstractView {
                         save.style.display = "block";
                     }
                 }
-            }
+            };
 
 
             if (e.target.className !== "box-note") {
@@ -181,18 +244,25 @@ export default class extends AbstractView {
                     let save = document.querySelector(`.btn-note-${box[i].id}`);
                     save.style.display = "none";
                 }
-            }
+            };
+
+            note["id"] = id
+            note["content"] = content
+            note["product_id"] = product_id
 
             document.querySelector(`.btn-note-${id}`).addEventListener('click', (e) => {
 
                 e.preventDefault()
 
-                console.log(content)
+                id = note["id"];
+                content = note["content"];
+                product_id = note["product_id"];
+
                 submit(id, content, product_id);
 
             }, false);
 
-        }, {});
+        });
 
         function submit(id, content, product_id) {
 
@@ -209,37 +279,11 @@ export default class extends AbstractView {
             }).then(res => res.json())
                 .then(response => {
                     console.log(response)
-                })
+                });
 
-        }
+        };
 
 
 
     }
 }
-
-
-
-
-
-/*
-
-if (e.target.className === "box-note") {
-    for (let i = 0; i < box.length; i++) {
-        if (box[i].id == id) {
-            console.log(id)
-            console.log(content)
-            document.getElementById(id)
-            console.log(document.querySelector(`.btn-note-${id}`).style.display = 'block');
-          
-            
-        }
-    }
-
-}
-
-if (e.target.className !== "box-note") {
-    for (let i = 0; i < box.length; i++) {
-        document.querySelector(`.btn-note-${box[i].id}`).style.display = 'none';
-    }
-} */

@@ -30,9 +30,8 @@ export default class extends AbstractView {
 
         return `
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <div
-                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Items</h1>
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Products / Items</h1>
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <div class="btn-group me-2">
                             <button type="button" class="btn btn-sm btn btn-outline-dark" data-bs-toggle="modal"
@@ -53,6 +52,7 @@ export default class extends AbstractView {
                                         <div class="table-responsive">
                                             <table class="table table-md">
                                                 <p id="no-content-filter"></p>
+                                                <p id="counter-content-filter"></p>
                                                 <tbody id="content-filter"></tbody>
                                             </table>
                                         </div>
@@ -63,7 +63,7 @@ export default class extends AbstractView {
                     </div>
                     <!-- Init Modal -->
                     <div class="modal custom fade" id="modal" tabindex="-1" aria-labelledby="" aria-hidden="true">
-                        <div class="modal-dialog modal-sm">
+                        <div class="modal-dialog modal-md">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="exampleModalLabel">New Product</h5>
@@ -73,16 +73,16 @@ export default class extends AbstractView {
                                 <form>
                                     <div class="modal-body"> 
                                         <div class="col-lg">
-                                            <input class="form-control" type="file" id="filesToUpload"  multiple>
+                                            <input class="form-control" type="file" id="filesToUpload"  multiple/>
                                             <span id="status"><span>
                                         </div>
                                         <div class="col-lg">
                                             <label for="" class="col-form-label">Code:</label>
-                                            <input class="form-control" type="text" id="item_code">
+                                            <input class="form-control" type="text" id="item_code"/>
                                         </div>
                                         <div class="col-lg">
                                             <label for="" class="col-form-label">Title</label>
-                                            <input class="form-control" type="text" id="title">
+                                            <input class="form-control" type="text" id="title"/>
                                         </div>
                                         <div class="col-lg">
                                             <label for="" class="col-form-label">Description</label>
@@ -90,17 +90,17 @@ export default class extends AbstractView {
                                         </div>
                                         <div class="col-lg">
                                             <label for="" class="col-form-label">Category</label>
-                                            <select class="form-select" id="">
-                                                <option selected></option>                                           
+                                            <select class="form-select" id="category">
+                                                <option selected disabled></option>                                           
                                                 <option value="Spray">Spray</option>                                           
                                                 <option value="Machinery">Machinery</option>                                           
                                                 <option value="General Stock">General Stock</option>                                           
                                                 <option value="Joinery">Joinery</option>                                           
-                                           </select>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button class="btn btn-primary" type="submit" id="upload">Create</button>
+                                        <button class="btn btn-dark" type="submit" id="upload">Create</button>
                                     </div>
                                 </form>
                             </div>
@@ -109,16 +109,16 @@ export default class extends AbstractView {
                     <!-- End Modal -->
                 </div>
                 <!-- Items Content -->
-                <h2>Products / Items</h2>
                 <div class="table-responsive">
                     <table class="table table-md">
-                        <thead>
+                        <thead id="t-head-prods">
                             <tr>
                                 <th scope="col">Code</th>
                                 <th scope="col">Title</th>
                                 <th scope="col">Description</th>
                                 <th scope="col">Date</th>
                                 <th scope="col">Registered</th>
+                                <th scope="col">°</th>
                             </tr>
                         </thead>
                         <tbody id="t-body">${itemList}</tbody>
@@ -143,30 +143,39 @@ export default class extends AbstractView {
 
             const filter = document.querySelector('#content-filter');
             const noneFilter = document.querySelector('#no-content-filter');
+            const counter = document.querySelector('#counter-content-filter');
             const date = document.querySelector('#date').value;
 
-            // Render in modal once any date was picked
+            // Render results in modal once any date was picked
+            let sum = 0
             filter.innerHTML = '';
+            counter.innerHTML = '';
+            noneFilter.innerHTML = '';
+            noneFilter.style.display = '';
+            
             for (let i = 0; i < items.length; i++) {
                 if (items.length > 0 && items[i].created === date) {
-                    noneFilter.innerHTML = `
+                    noneFilter.style.display = 'none';
+                    counter.innerHTML = `
                     <tr>
-                        <td>${i + 1} items found.</td>
+                        <td>${sum += 1} items found.</td>
                     </tr>`;
                     filter.innerHTML += `
-                        <tr scope="row" class="p-row-all" id="${items[i].id}" data-link>
                             <td>${items[i].item_code}</td>
                             <td>${items[i].title}</td>
                             <td><a class="btn btn-sm btn-outline-secondary" href="/products/details/${items[i].id}" data-bs-dismiss="modal" data-link>See</a></td>
                         </tr>`
-                } else {
-                    noneFilter.innerHTML = `
+                };
+
+                if (items.length) {
+                    noneFilter.innerHTML = `                       
                     <tr>
                         <td>Could not find any for this date.</td>
                     </tr>`;
                 };
             };
         };
+
 
         // Add Product method
         document.querySelector('#upload').addEventListener('click', (e) => {
@@ -175,6 +184,7 @@ export default class extends AbstractView {
             const item_code = document.querySelector('#item_code').value;
             const title = document.querySelector('#title').value;
             const description = document.querySelector('#description').value;
+            const category = document.querySelector('#category').value
             const fileField = document.querySelector('#filesToUpload');
             const statusDiv = document.querySelector('#status');
 
@@ -201,10 +211,12 @@ export default class extends AbstractView {
             formData.append('item_code', item_code);
             formData.append('title', title);
             formData.append('description', description);
+            formData.append('category', category);
             fetch('http://127.0.0.1:8000/products/',
                 {
                     method: 'POST', mode: 'no-cors', body: formData
                 })
+                .then(window.location.reload())
         })
     }
 

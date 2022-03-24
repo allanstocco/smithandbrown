@@ -34,7 +34,7 @@ const router = async () => {
         { path: "/orders", view: Orders },
         { path: "/products", view: Products },
         { path: "/products/details/:id", view: Details },
-        { path: "/edit/:id", view: Editem}
+        { path: "/edit/:id", view: Editem }
     ];
 
     const potentialMatches = routes.map(route => {
@@ -74,3 +74,12 @@ document.addEventListener("DOMContentLoaded", () => {
     router();
 });
 
+
+let navToggle = document.getElementsByClassName("nav-link");
+for (var i = 0; i < navToggle.length; i++) {
+    navToggle[i].addEventListener("click", function () {
+        var current = document.getElementsByClassName("active");
+        current[0].className = current[0].className.replace(" active", "");
+        this.className += " active";
+    });
+}

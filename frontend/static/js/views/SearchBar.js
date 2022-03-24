@@ -12,7 +12,7 @@ fetch(`http://127.0.0.1:8000/products/`)
     .then(result => {
         let DropDown = document.querySelector(".dropdown-content");
         let DropData = document.querySelector("#myDropdown");
-        const Search = document.querySelector('#searchBar');
+        let Search = document.querySelector('#searchBar');
 
 
         for (let i = 0; i < result.length; i++) {
@@ -26,7 +26,7 @@ fetch(`http://127.0.0.1:8000/products/`)
 
             if (e.target !== Search) {
                 DropDown.style.display = 'none';
-            } else if (e.target == Search) {
+            } else if (e.target === Search) {
                 DropDown.style.display = ''
                 Search.addEventListener('keyup', () => {
                     DropDown.classList.toggle("show");
@@ -37,16 +37,14 @@ fetch(`http://127.0.0.1:8000/products/`)
         })
 
 
-        function Searching(e) {
+        function Searching(filter) {
 
             // Fetching product in the top search bar
-            var a, i, txtValue;
+            var a, i;
 
             a = DropData.getElementsByTagName("a");
             for (i = 0; i < a.length; i++) {
-                txtValue = a[i].textContent || a[i].innerText;
-                console.log(txtValue.toUpperCase())
-                if (txtValue.toUpperCase().indexOf(e) > -1) {
+                if (a[i].innerHTML.toUpperCase().includes(filter)) {
                     a[i].style.display = "";
                 } else {
                     a[i].style.display = "none";
@@ -55,4 +53,3 @@ fetch(`http://127.0.0.1:8000/products/`)
         }
     })
 
-    

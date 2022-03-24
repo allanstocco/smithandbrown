@@ -28,13 +28,51 @@ export default class extends AbstractView {
 
     async after_render() {
 
-       
-        const BChartData = `http://127.0.0.1:8000/orders`;
+        // Bar Chart 
+        const BChartData = `http://127.0.0.1:8000/products/`;
         const Bresponse = await fetch(BChartData);
         const Bar_data = await Bresponse.json();
         const products = Bar_data;
 
+        let spray = 0;
+        function prods_spray(spray) {
+            for (var i = 0; i < products.length; i++) {
+                if (products[i].category === "Spray") {
+                    spray += 1;
+                }
+            }
+            return spray;
+        };
 
+        let joinery = 0;
+        function prods_joinery(joinery) {
+            for (var i = 0; i < products.length; i++) {
+                if (products[i].category === "Joinery") {
+                    joinery += 1;
+                }
+            }
+            return joinery;
+        };
+
+        let general = 0;
+        function prods_general(general) {
+            for (var i = 0; i < products.length; i++) {
+                if (products[i].category === "General Stock") {
+                    general += 1;
+                }
+            }
+            return general;
+        };
+
+        let machinery = 0;
+        function prods_machinery(machinery) {
+            for (var i = 0; i < products.length; i++) {
+                if (products[i].category === "Machinery") {
+                    machinery += 1;
+                }
+            }
+            return machinery;
+        };
 
         const bar = document.querySelector('#myChartBar');
         const line = document.querySelector('#myChartLine');
@@ -58,7 +96,7 @@ export default class extends AbstractView {
 
 
         var xValues = ["Spray", "Machinery", "General Stock", "Joinery"];
-        var yValues = [2, 49, 44, 24];
+        var yValues = [prods_spray(spray), prods_machinery(machinery), prods_general(general), prods_joinery(joinery)];
 
         new Chart(bar, {
             type: 'bar',
@@ -87,7 +125,7 @@ export default class extends AbstractView {
             }
         });
 
-    
+
         // Polar Area Chart Data
         const PAChartData = `http://127.0.0.1:8000/orders`;
         const PA_response = await fetch(PAChartData);

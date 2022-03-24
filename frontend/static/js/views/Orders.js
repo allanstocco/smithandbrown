@@ -46,15 +46,13 @@ export default class extends AbstractView {
                 </p>
             </div>
             <br>
-            <br>
-            <br>
             <div id="show-orders-div">
                 <div class="table-responsive">
                     <table class="table table-sm">
                         <thead id="t-head-orders">
                             <tr>
                                 <th>Qty</th>
-                                <th>Title</th>
+                                <th>Job</th>
                                 <th>Description</th>
                                 <th>Code</th>
                                 <th>Supplier</th>
@@ -93,7 +91,12 @@ export default class extends AbstractView {
                 th.innerHTML = arrHead[h];
                 tr.appendChild(th);
             }
+
+            var classDiv = document.createElement('div')
+            classDiv.setAttribute('class', 'mt-3 col-md-12')
+
             var div = document.getElementById('cont');
+            div.appendChild(classDiv);
             div.appendChild(empTable);
         }
 
