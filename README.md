@@ -110,13 +110,24 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
+* * *
+
 ### Front End:
 
+#### Express.js
 ```json
-
+npm install express
 ```
 
+### Running Front
 
+```json
+node server.js
+```
+
+<br>
+
+## Allan Stocco
 
 
 
