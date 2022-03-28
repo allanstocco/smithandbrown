@@ -7,6 +7,23 @@ export default class extends AbstractView {
 
 
     async getHtml() {
+
+        const User = sessionStorage.getItem('username');
+        const apiUser = `http://127.0.0.1:8000/users/${User}`;
+        const resp = await fetch(apiUser);
+        const UserData = await resp.json();
+
+        const Profile = `
+            <div class="col picture">
+                <img style="width: 240px; height: 240px;" src="http://127.0.0.1:8000${UserData.profile}">
+            </div>
+            <div class="col name-surname">
+                <p><strong>Name:</strong> ${UserData.first_name}</p>
+                <p><strong>Surname:</strong> ${UserData.last_name}</p>
+                <p><strong>User ID:</strong> ${UserData.id}</p>
+                <p><strong>Phone:</strong> ${UserData.phone_number}</p>
+            </div>`
+
         return `
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <div
@@ -14,12 +31,24 @@ export default class extends AbstractView {
                 <h1 class="h2">Dashboard</h1>
                 <div class="btn-toolbar mb-2 mb-md-0"></div>
             </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <canvas id="myChartBar" style="width:50%;"></canvas>
-                </div>
-                <div class="col-sm-6">
-                    <canvas id="myChartLine" style="width:50%;"></canvas>
+            <div class="container">
+                <div class="row">
+                    ${Profile}
+                </div>      
+            </div>
+            <br>
+            <br>
+            <br>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <p style="text-align: justify;">Lorem ipsum dolor sit amet. A distinctio nihil ut soluta aliquid a explicabo debitis ea omnis veritatis et illo suscipit dignissimos voluptatem vel corporis. Quo provident architecto non sunt fugit est optio incidunt ut ipsa porro hic obcaecati harum ex delectus officia. Sit cupiditate modi est quia optio ad officia soluta qui sequi corrupti ut vitae dolor. Vel porro distinctio eos minus fuga eos ipsam quia et quaerat dignissimos et dolor saepe in molestiae veritatis id beatae deserunt.</p>
+                        <canvas id="myChartBar" style="width:50%;"></canvas>
+                    </div>
+                    <div class="col-sm-6">
+                        <p style="text-align: justify;">Lorem ipsum dolor sit amet. A distinctio nihil ut soluta aliquid a explicabo debitis ea omnis veritatis et illo suscipit dignissimos voluptatem vel corporis. Quo provident architecto non sunt fugit est optio incidunt ut ipsa porro hic obcaecati harum ex delectus officia. Sit cupiditate modi est quia optio ad officia soluta qui sequi corrupti ut vitae dolor. Vel porro distinctio eos minus fuga eos ipsam quia et quaerat dignissimos et dolor saepe in molestiae veritatis id beatae deserunt.</p>
+                        <canvas id="myChartLine" style="width:50%;"></canvas>
+                    </div>
                 </div>
             </div>
         </main>`

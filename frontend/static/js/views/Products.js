@@ -11,7 +11,7 @@ export default class extends AbstractView {
 
         // Fetch list of products
         const apiUrl = `http://127.0.0.1:8000/products/`;
-        const response = await fetch(apiUrl);
+        const response = await fetch(apiUrl)
         const data = await response.json();
         const items = data
         // Render mapping throught list
@@ -23,7 +23,14 @@ export default class extends AbstractView {
                         <td>${description.substring(0, 35)}...</td>
                         <td>${moment(created).format('DD/MM/YYYY')}</td>
                         <td>${user_creator}</td>
-                        <td><a class="btn btn-sm btn btn-outline-dark" href="/products/details/${id}" data-link>Details</a></td>
+                        <td>
+                            <a class="btn btn-sm btn btn-dark" href="/products/details/${id}" data-link>Details</a>
+                        </td>
+                        <td>
+                            <a class="btn btn-sm btn btn-dark del" data-link>
+                                <i class="icon-trash" id="${id}"></i>
+                            </a>
+                        </td>
                     </tr>
                 `
         ).join('\n');
@@ -89,6 +96,10 @@ export default class extends AbstractView {
                                             <textarea class="form-control" id="description"></textarea>
                                         </div>
                                         <div class="col-lg">
+                                            <label for="" class="col-form-label">Supplier</label>
+                                            <input class="form-control" id="supplier"/>
+                                        </div>
+                                        <div class="col-lg">
                                             <label for="" class="col-form-label">Category</label>
                                             <select class="form-select" id="category">
                                                 <option selected disabled></option>                                           
@@ -118,7 +129,8 @@ export default class extends AbstractView {
                                 <th scope="col">Description</th>
                                 <th scope="col">Date</th>
                                 <th scope="col">Registered</th>
-                                <th scope="col">°</th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody id="t-body">${itemList}</tbody>
@@ -129,6 +141,11 @@ export default class extends AbstractView {
 
     async after_render() {
 
+        const User = sessionStorage.getItem('username');
+        const apiUser = `http://127.0.0.1:8000/users/${User}`;
+        const resp = await fetch(apiUser);
+        const UserData = await resp.json();
+
         // Filtering searches by date
         document.querySelector('#submitDate').addEventListener("click", Filter, false);
 
@@ -137,7 +154,7 @@ export default class extends AbstractView {
 
             // Fetch Products
             const apiUrl = `http://127.0.0.1:8000/products/`;
-            const response = await fetch(apiUrl);
+            const response = await fetch(apiUrl)
             const data = await response.json();
             const items = data;
 
@@ -152,7 +169,7 @@ export default class extends AbstractView {
             counter.innerHTML = '';
             noneFilter.innerHTML = '';
             noneFilter.style.display = '';
-            
+
             for (let i = 0; i < items.length; i++) {
                 if (items.length > 0 && items[i].created === date) {
                     noneFilter.style.display = 'none';
@@ -185,9 +202,11 @@ export default class extends AbstractView {
             const title = document.querySelector('#title').value;
             const description = document.querySelector('#description').value;
             const category = document.querySelector('#category').value
+            const supplier = document.querySelector('#supplier').value
             const fileField = document.querySelector('#filesToUpload');
             const statusDiv = document.querySelector('#status');
 
+            const formData = new FormData();
 
             statusDiv.innerHTML = '';
 
@@ -198,7 +217,7 @@ export default class extends AbstractView {
                 return;
             }
 
-            const formData = new FormData();
+
             for (let i = 0; i < totalFilesToUpload; i++) {
                 statusDiv.innerHTML = `Working on file ${i + 1} of ${totalFilesToUpload}`;
                 formData.append('image', fileField.files[i]);
@@ -206,18 +225,32 @@ export default class extends AbstractView {
             }
 
             statusDiv.innerHTML = 'All complete.';
-            fileField.value = '';
 
             formData.append('item_code', item_code);
             formData.append('title', title);
             formData.append('description', description);
             formData.append('category', category);
+            formData.append('supplier', supplier);
+            formData.append('user_creator', UserData.id);
             fetch('http://127.0.0.1:8000/products/',
                 {
-                    method: 'POST', mode: 'no-cors', body: formData
+                    method: 'POST', mode: 'cors', body: formData
                 })
                 .then(window.location.reload())
         })
+
+
+        document.querySelector('.icon-trash').addEventListener('click', (e) => {
+
+            const del = e.target.id
+
+            if (window.confirm("Are you sure you want to delete this?")) {
+                fetch(`http://127.0.0.1:8000/delete/${del}`, {
+                    method: "delete"
+                })
+            };
+        })
+
     }
 
 }

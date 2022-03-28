@@ -275,16 +275,6 @@ body {
 
 /* Sticky notes */
 
-#container-notes {
-    position: relative;
-    display: inline-block;
-    width: inherit;
-    padding: 0;
-    right: 0;
-
-}
-
-
 #comment-box {
     margin-top: 30px;
 }
@@ -456,4 +446,14 @@ body {
     position: absolute;
     bottom: 0;
     left: 0;
+}
+
+.name-surname {
+    margin-top: 50px;
+}
+
+@media (max-width: 1024px) {
+    .picture {
+        text-align: center;
+    }
 }

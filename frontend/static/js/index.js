@@ -59,6 +59,15 @@ const router = async () => {
 
     document.querySelector("#app").innerHTML = await view.getHtml();
     view.after_render();
+
+    //Get User Details
+    const User = sessionStorage.getItem('username');
+    const apiUser = `http://127.0.0.1:8000/users/${User}`;
+    const resp = await fetch(apiUser);
+    const UserData = await resp.json();
+
+    document.querySelector('#user-title').innerHTML = `Welcome <br><br> ${UserData.first_name} ${UserData.last_name}`;
+    
 };
 
 window.addEventListener("popstate", router);
@@ -75,11 +84,4 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-let navToggle = document.getElementsByClassName("nav-link");
-for (var i = 0; i < navToggle.length; i++) {
-    navToggle[i].addEventListener("click", function () {
-        var current = document.getElementsByClassName("active");
-        current[0].className = current[0].className.replace(" active", "");
-        this.className += " active";
-    });
-}
+

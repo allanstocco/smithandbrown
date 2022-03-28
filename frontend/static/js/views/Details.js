@@ -60,7 +60,7 @@ export default class extends AbstractView {
                             </div>
                         </div>
                     </div>
-                    <div id="comment" class="form-group mx-sm-3 mb-2"><hr/>
+                    <div id="comment" class="form-group mx-sm-3 mb-2">
                         <h4>Notes:</h4>
                         <div id="textarea">
                             <textarea id="textarea-field" class="form-control" type="text" rows="4" cols="30"></textarea>
@@ -71,7 +71,7 @@ export default class extends AbstractView {
             </div>
         </div>
         <br>
-        <div id="container-notes" class="container-fluid">
+        <div class="container-fluid">
             <div class="row" id="comment-box"></div>
         </div> 
      
@@ -79,6 +79,11 @@ export default class extends AbstractView {
     }
 
     async after_render() {
+
+        const User = sessionStorage.getItem('username');
+        const apiUser = `http://127.0.0.1:8000/users/${User}`;
+        const result = await fetch(apiUser);
+        const UserData = await result.json();
 
         fetch(`http://127.0.0.1:8000/details/${this.ProductID}`)
 
@@ -192,6 +197,7 @@ export default class extends AbstractView {
 
         // Remarks Post
 
+
         document.querySelector('#textarea-btn').addEventListener('click', (e) => {
             e.preventDefault()
 
@@ -205,6 +211,7 @@ export default class extends AbstractView {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
+                        "user": UserData.id,
                         "products": this.ProductID,
                         "content": comment
                     })
