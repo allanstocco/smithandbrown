@@ -9,7 +9,7 @@ This project contains a Django Rest API with a plain and pure JavaScript with Ex
 I call this the S&B Inventory System.  
 Users will be able to signup an account once allowed throught Django Admin System. 
 
-Particularly, taking advantage of this last project as a free theme, I joined my needs, as I work in a Carpentry Workshop and one of my responsibilities is to receive and order products, in addition to controlling and organizing the stock, keeping it up to date.  
+Particularly, taking advantage of this last project as a free theme, I joined my needs, as I work in a Carpentry Workshop and one of my responsibilities is to receive and order products, in addition to controlling and organizing the stock, keeping it up to date. My first thought was to make a tool that could help me with these tasks on a daily basis.  
 
 So with that said, the purpose of the app is actually a daily tool for my personal use in controlling these tasks. 
 However, I will continue to implement and update this app as the main objective will be to deploy the application and be able to register the products with photos, their respective codes and reference numbers by mobile.
@@ -21,7 +21,7 @@ However, I will continue to implement and update this app as the main objective 
 I consider that this project meets all the expectations raised in the assignment of the CS50W final project, as it is a web platform that implements most of the concepts and techniques taught in the course.
 The whole application is based on the Django framework, which allowed managing user login and authentication, database models, http requests, static files.  
 
-Apart from this, user interface was designed based on pure JavaScript, including routing, databinding and JavaScript's native module. The web application is mobile responsive. With Express.js help I could handle responses and routes. It is also part of the application that listens to a socket to handle incoming requests.  
+Apart from this, user interface was designed based on pure JavaScript, including routing, databinding and JavaScript's native module. The web application is mobile responsive. With Express.js help I could handle responses and routes. It is also part of the application that listens to a socket to handle incoming responses.  
 
 I consider that what differentiates this app from the previous ones is its single page system, its dynamic forms and the DRF which was something new for me that required a lot of reading and learning.
 
