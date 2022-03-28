@@ -128,9 +128,9 @@ node server.js
 <br>
 
 
-![Login page](API/media/dash.png)
-![Login page](API/media/Orders.jpg)
-![Login page](API/media/prod_detail.png)
+![Dash](API/media/dash.png)
+![Orders](API/media/Orders.jpg)
+![Prod_Details](API/media/prod_detail.png)
 
 <br>
 
