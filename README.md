@@ -33,7 +33,7 @@ I consider that what differentiates this app from the previous ones is its singl
 The web platform is structured as follows
 
 - **frontend:** This folder contains the front end part that displays the landing page that allows the users to interact with the application.
-- **API:** This folder contains the API funtions and models which can be called from the front end. This API folder contains the funtions and models for products, files, comments, orders. This folder also have all serializers to validate the incoming data.
+- **API:** This folder contains the API funtions and models which can be called from the front end. This API folder contains the funtions and models for users-profile, products, pictures, comments, orders. This folder also have all serializers to validate the incoming data.
 - **Inventory:** The Inventory folder handles the models and funtions relating to the main Django app.
 - **user:** This folder app handles the models and funtions relating to users.
 
@@ -44,7 +44,7 @@ The web platform is structured as follows
 
 ### Front End:
 
-- `frontend` - front-end directory.
+- `frontend/` - front-end directory.
   - `login.html` - Login Page.
   - `index.html` - Base Template, this file renders all js modules. This file is the main layout of the UI web application.
     - `static/` - contains all static content.
@@ -59,9 +59,64 @@ The web platform is structured as follows
           - `Orders.js` - this file renders the Orders page, where the user can order orders.  
           - `Products.js` - this file renders all products as a list, handles the product addition form, where you can choose multiple images and register a new product. There is also a datepicker to filter and search for products by registration date.  
           - `SearchBar.js` - this file handles top fixed search bar functionality where user can query from anywhere in the app.
-        - `index.js` - The main JS file, included in index.html. Responsible for routing all modules below.    
-  
-   
-</br>
+        - `index.js` - The main JS file, included in index.html. Responsible for routing all modules below. 
+- `server.js` - serve front on port - 3000.    
+### Back End:
+- `API/` - back-end directory.
+  - `Inventory/` - app.
+    - `admin` - This file is used for registering the models into the django administration.
+    - `models` - This file contains the models of our web application. Resposible for holding informations of UserProfile, Products, Comments, Orders, Pictures.
+    - `serializers` - Serializers to deal with model instances and querysets.
+    - `urls` - This file contains the lists of all the endpoints that we will have for our web application.
+    - `views` - Contains the funtions for the web application. These view functions sends and receives http request and response.
+  - `user/` - app.
+    - `admin` - This file is used for registering the models into the django administration.
+    - `models` - This file contains the models of our web application. Responsible for User database modeling.
+    - `serializers` - Serializers to deal with model instances and querysets.
+    - `urls` -  This file contains endpoints related to login.
+    - `views` - Contains the funtions for the web application. These view functions sends and receives http request and response.
+  - `media/` - This directory contains images, here will be saved all products and user photos.
+  - `sbim/` - Project directory.
+  - `manage.py` - This file is used as a command-line utility and for deploying, debugging, or running the web application.This file contains code for runserver, makemigrations or migrations.
 
-## Back End:
+<br>
+
+# Installation & Running Application
+
+### Back End:
+
+#### Firstly
+```json
+pip install -r requirements.txt
+```
+##### Then
+
+```json
+python manage.py makemigrations user
+python manage.py migrate user
+python manage.py makemigrations Inventory
+python manage.py migrate Inventory
+```
+
+##### Then
+
+```json
+python manage.py createsuperuser
+```
+
+#### Finally
+
+```json
+python manage.py runserver
+```
+
+### Front End:
+
+```json
+
+```
+
+
+
+
+
