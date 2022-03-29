@@ -5,11 +5,11 @@ Product Details.
 Adding Products.  
 Editing Product.  
 Ordering Product.  
-Search Filtering products by date.  
+Search filtering products by date.  
 
 <hr/>
 
-### Notes:
+### Sticky Notes:
 Making notes on Product.  
 Editing the note.  
 
