@@ -8,6 +8,10 @@ export default class extends AbstractView {
     }
 
     async getHtml() {
+        const User = sessionStorage.getItem('username');
+        const apiUser = `http://127.0.0.1:8000/users/${User}`;
+        const result = await fetch(apiUser);
+        const UserData = await result.json();
 
         // Fetch list of products
         const apiUrl = `http://127.0.0.1:8000/products/`;
@@ -16,17 +20,15 @@ export default class extends AbstractView {
         const items = data
         // Render mapping throught list
         const itemList = items.map(
-            ({ id, item_code, title, description, created, user_creator }) => `
+            ({ id, item_code, title, description, created }) => `
                     <tr class="p-row-all" id="${id}" data-link>
                         <td>${item_code}</td>
                         <td>${title}</td>
-                        <td>${description.substring(0, 35)}...</td>
-                        <td>${moment(created).format('DD/MM/YYYY')}</td>
-                        <td>${user_creator}</td>
-                        <td>
+                        <td id="desc-res">${description.substring(0, 35)}...</td>
+                        <td id="date-res">${moment(created).format('DD/MM/YYYY')}</td>
+                        <td id="regs-res">${UserData.first_name}</td>
+                        <td id="actions">
                             <a class="btn btn-sm btn btn-dark" href="/products/details/${id}" data-link>Details</a>
-                        </td>
-                        <td>
                             <a class="btn btn-sm btn btn-dark del" data-link>
                                 <i class="icon-trash" id="${id}"></i>
                             </a>
@@ -80,7 +82,7 @@ export default class extends AbstractView {
                                 <form>
                                     <div class="modal-body"> 
                                         <div class="col-lg">
-                                            <input class="form-control" type="file" id="filesToUpload"  multiple/>
+                                            <input class="form-control" type="file" id="filesToUpload" multiple/>
                                             <span id="status"><span>
                                         </div>
                                         <div class="col-lg">
@@ -121,16 +123,15 @@ export default class extends AbstractView {
                 </div>
                 <!-- Items Content -->
                 <div class="table-responsive">
-                    <table class="table table-md">
+                    <table class="table table-sm">
                         <thead id="t-head-prods">
                             <tr>
                                 <th scope="col">Code</th>
                                 <th scope="col">Title</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Date</th>
-                                <th scope="col">Registered</th>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
+                                <th id="desc-res" scope="col">Description</th>
+                                <th id="date-res" scope="col">Date</th>
+                                <th id="regs-res" scope="col">Registered ID</th>
+                                <th scope="col">Actions</th>
                             </tr>
                         </thead>
                         <tbody id="t-body">${itemList}</tbody>
@@ -217,7 +218,6 @@ export default class extends AbstractView {
                 return;
             }
 
-
             for (let i = 0; i < totalFilesToUpload; i++) {
                 statusDiv.innerHTML = `Working on file ${i + 1} of ${totalFilesToUpload}`;
                 formData.append('image', fileField.files[i]);
@@ -232,6 +232,7 @@ export default class extends AbstractView {
             formData.append('category', category);
             formData.append('supplier', supplier);
             formData.append('user_creator', UserData.id);
+
             fetch('http://127.0.0.1:8000/products/',
                 {
                     method: 'POST', mode: 'cors', body: formData

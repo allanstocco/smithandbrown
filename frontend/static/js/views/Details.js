@@ -63,7 +63,7 @@ export default class extends AbstractView {
                     <div id="comment" class="form-group mx-sm-3 mb-2">
                         <h4>Notes:</h4>
                         <div id="textarea">
-                            <textarea id="textarea-field" class="form-control" type="text" rows="4" cols="30"></textarea>
+                            <textarea id="textarea-field" class="form-control" type="text" rows="4" cols="30" placeholder="Make a note..."></textarea>
                             <button id="textarea-btn" class="btn btn-sm btn-inline-secondary">Done!</button>
                         </div>
                     </div>
@@ -73,8 +73,9 @@ export default class extends AbstractView {
         <br>
         <div class="container-fluid">
             <div class="row" id="comment-box"></div>
-        </div> 
-     
+        </div>
+        <br> 
+        <br> 
     </main>`;
     }
 
@@ -110,7 +111,7 @@ export default class extends AbstractView {
                         <span>Supplier: ${data.supplier}</span>
                     </div>
                     <div class="profileProducts">
-                        <span>Registered by: ${data.user_creator}</span>
+                        <span>Registered ID: ${UserData.first_name}</span>
                     </div>
                     <div class="profileProducts">
                         <span>Registered: ${moment(data.created).format('DD/MM/YYYY')}</span>
@@ -141,7 +142,7 @@ export default class extends AbstractView {
                         <ul class="ul-note">
                             <li id="comment-box" class="li-note">
                                 <div class="a-note">
-                                    <h2 class="h2-note">${showComments[i].user}</h2>
+                                    <h2 class="h2-note">${UserData.first_name}</h2>
                                     <p class="p-note">${moment(showComments[i].created).format('DD/MM/YYYY')}</p>
                                     <p class="box-note" id="${showComments[i].id}" contenteditable>${showComments[i].content}</p>
                                     <button type="submit" class="btn btn-link btn-sm btn-note-${showComments[i].id}" id="submit" style="display: none;">Save</button>

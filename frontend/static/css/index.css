@@ -254,9 +254,13 @@ body {
     font-family: futura;
 }
 
+#comment>h4 {
+    margin-top: 5%;
+}
+
 #textarea {
     position: relative;
-    border: 2px solid #ddd;
+    border: none;
 }
 
 #textarea-btn {
@@ -268,12 +272,13 @@ body {
 
 #textarea-field {
     position: relative;
-    border: none;
+    border-color: #2470dc;
     resize: none;
     outline: none;
 }
 
 /* Sticky notes */
+
 
 #comment-box {
     margin-top: 30px;
@@ -351,6 +356,7 @@ body {
         height: 10em;
         width: 10em;
         margin: 0px;
+        margin-top: 30px;
     }
 
     .a-note>.p-note, .box-note, #submit {
@@ -370,6 +376,7 @@ body {
         height: 8em;
         width: 8em;
         padding: .2em;
+        margin-top: 30px;
     }
 
     .a-note>.p-note, .box-note, #submit {
@@ -436,7 +443,7 @@ body {
 
 .add-to-order {
     position: relative;
-    min-height: 15%;
+    min-height: 20%;
 }
 
 .add-to-order>a {
@@ -455,5 +462,19 @@ body {
 @media (max-width: 1024px) {
     .picture {
         text-align: center;
+    }
+}
+
+td {
+    vertical-align: center;
+}
+
+#actions>a {
+    display: inline;
+}
+
+@media (max-width: 768px) {
+    #desc-res, #regs-res, #date-res {
+        display: none;
     }
 }

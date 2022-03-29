@@ -31,8 +31,6 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = UserSerializer(user)
         return JsonResponse(serializer.data, safe=False)
 
-   
-
 
 class ProductsViewSet(viewsets.ModelViewSet):
     queryset = Products.objects.order_by('title')

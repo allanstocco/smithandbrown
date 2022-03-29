@@ -14,10 +14,10 @@ export default class extends AbstractView {
         const UserData = await resp.json();
 
         const Profile = `
-            <div class="col picture">
+            <div class="col-sm picture">
                 <img style="width: 240px; height: 240px;" src="http://127.0.0.1:8000${UserData.profile}">
             </div>
-            <div class="col name-surname">
+            <div class="col-sm name-surname">
                 <p><strong>Name:</strong> ${UserData.first_name}</p>
                 <p><strong>Surname:</strong> ${UserData.last_name}</p>
                 <p><strong>User ID:</strong> ${UserData.id}</p>
